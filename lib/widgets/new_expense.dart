@@ -1,3 +1,4 @@
+/* Importing from libraries / packages */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -6,9 +7,11 @@ import 'dart:io';
 
 final formatter = DateFormat.yMd();
 
+//NewExpanse class (somehow i named Expense wrong here and im to lazy to change it.)
 class NewExpanse extends StatefulWidget {
   const NewExpanse({super.key, required this.onAddExpense});
 
+  //function to handle adding an expense.
   final void Function(Expense expense) onAddExpense;
 
   @override
@@ -17,12 +20,18 @@ class NewExpanse extends StatefulWidget {
   }
 }
 
+
 class _NewExpanseState extends State<NewExpanse> {
+
+  //controller for text input.
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  //selected date and time.
   DateTime? _selectedDate;
   Category _selectedCategory = Category.leisure;
 
+
+  //function to let the user get a date picker dialog on the phone.
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -36,6 +45,10 @@ class _NewExpanseState extends State<NewExpanse> {
     });
   }
 
+
+  //function to add error dialog when adding invalid expense or expense with to little information.
+  //Uses the cupertino alert for ios devices to give more of an ios look.
+  //The regular alertdialog is used for all other cases.
   void _showDialog() {
     if (Platform.isIOS) {
       showCupertinoDialog(
@@ -73,6 +86,8 @@ class _NewExpanseState extends State<NewExpanse> {
     }
   }
 
+
+  //submits the expense data. This data is later used to either check for errors so we can give the dialog from _showdialog or the data is used in expenses which are added to the mainpage.
   void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
@@ -83,6 +98,7 @@ class _NewExpanseState extends State<NewExpanse> {
       return;
     }
 
+  //calls the onAddExpense with the new expense data.
     widget.onAddExpense(
       Expense(
         title: _titleController.text,
@@ -91,9 +107,11 @@ class _NewExpanseState extends State<NewExpanse> {
         category: _selectedCategory,
       ),
     );
+    //Close the newexpense overlay.
     Navigator.pop(context);
   }
 
+  //dispose of controllers when the widget is removed (important!)
   @override
   void dispose() {
     _titleController.dispose();

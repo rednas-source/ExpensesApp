@@ -1,13 +1,20 @@
+/* Importing from libraries / packages */
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/expenses_list/expense_item.dart';
 import 'package:flutter/material.dart';
 
+//ExpensesList class
 class ExpensesList extends StatelessWidget {
   const ExpensesList(
       {super.key, required this.expenses, required this.onRemoveExpense});
 
+
+  //List of expenses
   final List<Expense> expenses;
+  //Callback function to handle removing an expanse object.
   final void Function(Expense expense) onRemoveExpense;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,7 @@ class ExpensesList extends StatelessWidget {
         onDismissed: (direction) {
           onRemoveExpense(expenses[index]);
         },
+        //displaying the expenseitem widget for all expenses.
         child: ExpenseItem(expenses[index]),
       ),
     );

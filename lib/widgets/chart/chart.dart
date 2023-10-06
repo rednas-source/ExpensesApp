@@ -1,13 +1,16 @@
+/* Importing from libraries / packages */
 import 'package:flutter/material.dart';
-
 import 'package:expense_tracker/widgets/chart/chart_bar.dart';
 import 'package:expense_tracker/models/expense.dart';
 
+//Chart class
 class Chart extends StatelessWidget {
   const Chart({super.key, required this.expenses});
 
+  // list of expenses, used for chart data.
   final List<Expense> expenses;
 
+  // getter for a list of expense buckets.
   List<ExpenseBucket> get buckets {
     return [
       ExpenseBucket.forCategory(expenses, Category.food),
@@ -17,6 +20,7 @@ class Chart extends StatelessWidget {
     ];
   }
 
+  //Calculate total expense for scaling..
   double get maxTotalExpense {
     double maxTotalExpense = 0;
 

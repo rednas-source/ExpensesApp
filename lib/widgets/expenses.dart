@@ -1,3 +1,4 @@
+/* Importing from libraries / packages */
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/chart/chart.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
@@ -73,6 +74,9 @@ class _ExpensesState extends State<Expenses> {
     // Filter and sum expenses that are within the last week
     double totalLastWeekExpenses = 0;
 
+    // goes trough the all expenses in the List to check if the expense was between lastWeek and NOW.
+    // if the condition all expenses within the period is added together and returned.
+    // the value will be used in the card later down in the code.
     for (final expense in _registeredExpenses) {
       final expenseDate = expense.date;
       if (expenseDate.isAfter(lastWeek) && expenseDate.isBefore(now)) {
@@ -105,11 +109,15 @@ class _ExpensesState extends State<Expenses> {
           ),
         ],
       ),
+      //using ternary condition to say that if the width being used by the screen (which is defined above) is more than 600 use a colom, if not use a row.
+      //the code below column and row are mostly the same so i wont comment on both.
       body: width < 600
           ? Column(
               children: [
                 Chart(expenses: _registeredExpenses),
                 Card(
+                // Adding the card for the last expenses 
+                //(this could have been done with theming. Also could've created a widget instead and added the widget)
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -118,12 +126,18 @@ class _ExpensesState extends State<Expenses> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Last 7 days expenses',
-                            style: TextStyle(
-                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        const Text(
+                        //Adding some extra definition to the card since i want it to look a bit seperate from the other expenses card.
+                          'Last 7 days expenses',
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Row(
                           children: [
                             Text(
+                            //Using the value calculated from the method to show the user how much expense he/she has had in the last week (7 days).
                                 '\$${calculateLastWeekExpenses().toStringAsFixed(2)}',
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
