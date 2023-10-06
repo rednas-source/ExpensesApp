@@ -65,6 +65,23 @@ class _ExpensesState extends State<Expenses> {
     );
   }
 
+  double calculateLastWeekExpenses() {
+    // Calculate the date one week ago from today
+    final DateTime now = DateTime.now();
+    final DateTime lastWeek = now.subtract(const Duration(days: 7));
+
+    // Filter and sum expenses that are within the last week
+    double totalLastWeekExpenses = 0;
+
+    for (final expense in _registeredExpenses) {
+      final expenseDate = expense.date;
+      if (expenseDate.isAfter(lastWeek) && expenseDate.isBefore(now)) {
+        totalLastWeekExpenses += expense.amount;
+      }
+    }
+    return totalLastWeekExpenses;
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -92,6 +109,39 @@ class _ExpensesState extends State<Expenses> {
           ? Column(
               children: [
                 Chart(expenses: _registeredExpenses),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Last 7 days expenses',
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        Row(
+                          children: [
+                            Text(
+                                '\$${calculateLastWeekExpenses().toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                            const Spacer(),
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.attach_money_rounded,
+                                  size: 50,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: mainContent,
                 ),
@@ -99,11 +149,51 @@ class _ExpensesState extends State<Expenses> {
             )
           : Row(
               children: [
-                Expanded(child: Chart(expenses: _registeredExpenses),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Chart(expenses: _registeredExpenses),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Last 7 days expenses',
+                                  style: TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold)),
+                              Row(
+                                children: [
+                                  Text(
+                                      '\$${calculateLastWeekExpenses().toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  const Spacer(),
+                                  const Row(
+                                    children: [
+                                      Icon(
+                                        Icons.attach_money_rounded,
+                                        size: 50,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: mainContent,
-                )
+                ),
               ],
             ),
     );
