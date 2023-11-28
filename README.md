@@ -57,6 +57,10 @@ StockHistory : +high double
 StockHistory : +low double
 StockHistory : +volume int
 
+class StockListModel
+StockListModel : +lid int
+StockListModel : +name String
+StockListModel : +valid bool
 
 class StockPurchase
 StockPurchase : +spid int
