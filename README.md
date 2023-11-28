@@ -16,346 +16,293 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
+## Class Diagram
+
 ```mermaid
 classDiagram
 class MyApp
-MyApp : +createState() State<MyApp>
-StatefulWidget <|-- MyApp
+MyApp : +settingsController SettingsController
+MyApp o-- SettingsController
+MyApp : +build() Widget
+ConsumerWidget <|-- MyApp
 
-class _MyAppState
-_MyAppState : -_pages$ List~Widget~
-_MyAppState : +build() Widget
-State <|-- _MyAppState
+class EventDataSource
+EventDataSource : +getStartTime() DateTime
+EventDataSource : +getEndTime() DateTime
+EventDataSource : +getSubject() String
+EventDataSource : +isAllDay() bool
+EventDataSource : +getColor() Color
+CalendarDataSource <|-- EventDataSource
 
-class Portfolio
-Portfolio : +pid int
-Portfolio : +user User
-Portfolio o-- User
-Portfolio : +stockPurchases Set~StockPurchase~
+class Announcement
+Announcement : +id String
+Announcement : +courseID String
+Announcement : +published DateTime
+Announcement : +message String
 
-class PortfolioHistory
-PortfolioHistory : +phid int
-PortfolioHistory : +date DateTime
-PortfolioHistory : +price double
+class Assignment
+Assignment : +date String
+Assignment : +subject String
+Assignment : +title String
+Assignment : +description String
+Assignment : +bgColor Color
+Assignment o-- Color
 
-class Stock
-Stock : +id int
-Stock : +symbol String
-Stock : +name String
-Stock : +currentPrice double
-Stock : +openingPrice double
-Stock : +percentChangeIntraday double
-Stock : +toJson() Map<String, dynamic>
+class AssignmentType
+<<enumeration>> AssignmentType
+AssignmentType : +index int
+AssignmentType : +values$ List~AssignmentType~
+AssignmentType : +deliver$ AssignmentType
+AssignmentType o-- AssignmentType
+AssignmentType : +quiz$ AssignmentType
+AssignmentType o-- AssignmentType
+Enum <|.. AssignmentType
 
-class StockHistory
-StockHistory : +date DateTime
-StockHistory : +open double
-StockHistory : +close double
-StockHistory : +high double
-StockHistory : +low double
-StockHistory : +volume int
+class Content
+Content : +contentType ContentType
+Content o-- ContentType
+Content : +name String
+Content : +description String
 
-class StockListModel
-StockListModel : +lid int
-StockListModel : +name String
-StockListModel : +stocks List~Map~String, dynamic~~
-StockListModel : +valid bool
+class ContentType
+<<enumeration>> ContentType
+ContentType : +index int
+ContentType : +values$ List~ContentType~
+ContentType : +folder$ ContentType
+ContentType o-- ContentType
+ContentType : +assignment$ ContentType
+ContentType o-- ContentType
+ContentType : +file$ ContentType
+ContentType o-- ContentType
+Enum <|.. ContentType
 
-class StockPurchase
-StockPurchase : +spid int
-StockPurchase : +date DateTime
-StockPurchase : +price double
-StockPurchase : +quantity int
+class Course
+Course : +id String
+Course : +name String
+Course : +fullname String
+Course : +semester Semester
+Course o-- Semester
 
-class User
-User : +email String
-User : +password String
-User : +uid int
-User : +toJson() Map<String, dynamic>
+class Event
+Event : +name String
+Event : +start DateTime
+Event : +end DateTime
+Event : +color Color?
+Event o-- Color
+Event : +room String?
+Event : +descripton String?
+Event : +fromJson()$ Event
 
-class TokenManager
-TokenManager : +storage$ FlutterSecureStorage
-TokenManager o-- FlutterSecureStorage
-TokenManager : +storeToken()$ void
-TokenManager : +getToken()$ dynamic
-TokenManager : +removeToken()$ void
+class GroupDetails
+GroupDetails : +id String
+GroupDetails : +name String
 
-class UserProvider
-UserProvider : -_user User?
-UserProvider o-- User
-UserProvider : +user User?
-UserProvider o-- User
-UserProvider : +setUser() void
-ChangeNotifier <|-- UserProvider
+class Semester
+Semester : +semesterPart SemesterPart
+Semester o-- SemesterPart
+Semester : +year int
+Semester : -_currentSemesterPart$ SemesterPart
+Semester o-- SemesterPart
+Semester : +nextSemester() Semester
+Semester : +previousSemester() Semester
+Semester : +toString() String
+Semester : +toEquals() dynamic
 
-class CustomNavigationBar
-CustomNavigationBar : +selectedIndex int
-CustomNavigationBar : +onItemTapped dynamic Functionint
-CustomNavigationBar o-- dynamic Functionint
-CustomNavigationBar : +build() Widget
-StatelessWidget <|-- CustomNavigationBar
+class SemesterPart
+<<enumeration>> SemesterPart
+SemesterPart : +index int
+SemesterPart : +values$ List~SemesterPart~
+SemesterPart : +spring$ SemesterPart
+SemesterPart o-- SemesterPart
+Enum <|.. SemesterPart
 
-class AddListPage
-AddListPage : +createState() _AddListPageState
-StatefulWidget <|-- AddListPage
+class TimeSlot
+TimeSlot : +start DateTime
+TimeSlot : +end DateTime
+TimeSlot : +room String
 
-class _AddListPageState
-_AddListPageState : +nameController TextEditingController
-_AddListPageState o-- TextEditingController
-_AddListPageState : -_addListToServer() dynamic
-_AddListPageState : -_createList() void
-_AddListPageState : -_checkIfNameIsValid() bool
-_AddListPageState : -_navMyListPage() void
-_AddListPageState : +build() Widget
-State <|-- _AddListPageState
+class UserDetails
+UserDetails : +id String
+UserDetails : +name String
+UserDetails : +groups_id int?
 
-class ExplorePage
-ExplorePage : +createState() _ExplorePageState
-StatefulWidget <|-- ExplorePage
+class AnnouncementRepository
+AnnouncementRepository : -_client SupabaseClient
+AnnouncementRepository o-- SupabaseClient
+AnnouncementRepository : +ref Ref~Object?~
+AnnouncementRepository o-- Ref~Object~
+AnnouncementRepository : -_getAnnouncements() dynamic
+StateNotifier <|-- AnnouncementRepository
 
-class _ExplorePageState
-_ExplorePageState : +stocks List~Stock~
-_ExplorePageState : +filteredStocks List~Stock~
-_ExplorePageState : +isLoading bool
-_ExplorePageState : +initState() void
-_ExplorePageState : -_fetchStocksDataFromServer() dynamic
-_ExplorePageState : -_goToStockDetailPage() dynamic
-_ExplorePageState : -_navToStockDetailPage() void
-_ExplorePageState : -_filterStocks() void
-_ExplorePageState : -_sortStocksByHighestPrice() void
-_ExplorePageState : -_sortStocksByLowestPrice() void
-_ExplorePageState : -_sortStocksByBiggestEarner() void
-_ExplorePageState : -_sortStocksByBiggestLoser() void
-_ExplorePageState : -_showSortOptions() void
-_ExplorePageState : -_onRefresh() dynamic
-_ExplorePageState : +build() Widget
-State <|-- _ExplorePageState
+class CourseRepository
+CourseRepository : -_client SupabaseClient
+CourseRepository o-- SupabaseClient
+CourseRepository : +ref Ref~Object?~
+CourseRepository o-- Ref~Object~
+CourseRepository : +channel RealtimeChannel?
+CourseRepository o-- RealtimeChannel
+CourseRepository : -_getCourses() dynamic
+CourseRepository : +updateCourses() dynamic
+StateNotifier <|-- CourseRepository
 
-class Inventory
-Inventory : +createState() State<Inventory>
-StatefulWidget <|-- Inventory
+class CurrentUserInformation
+CurrentUserInformation : -_client SupabaseClient
+CurrentUserInformation o-- SupabaseClient
+CurrentUserInformation : +ref Ref~Object?~
+CurrentUserInformation o-- Ref~Object~
+CurrentUserInformation : -_fetchUserDetails() void
+ValueNotifier <|-- CurrentUserInformation
 
-class _InventoryState
-_InventoryState : +stocks List~Stock~
-_InventoryState : +monetaryChange double?
-_InventoryState : +percentageChange double?
-_InventoryState : +portfolioHistory List~PortfolioHistory~
-_InventoryState : +initState() void
-_InventoryState : +didChangeDependencies() void
-_InventoryState : -_goToStockDetailPage() void
-_InventoryState : -_fetchStockDataFromServer() dynamic
-_InventoryState : -_setPortfolioHistoriesWithDataFromServer() dynamic
-_InventoryState : -_futureYourDevelopmentDataFromServer() dynamic
-_InventoryState : -_setDevelopmentText() dynamic
-_InventoryState : -_onRefresh() dynamic
-_InventoryState : +build() Widget
-State <|-- _InventoryState
+class GroupRepository
+GroupRepository : +supabase SupabaseClient
+GroupRepository o-- SupabaseClient
+GroupRepository : +fetchGroups() dynamic
 
-class LoginPage
-LoginPage : +createState() _LoginPageState
-StatefulWidget <|-- LoginPage
+class ScheduleRepository
+ScheduleRepository : -_client SupabaseClient
+ScheduleRepository o-- SupabaseClient
+ScheduleRepository : +ref Ref~Object?~
+ScheduleRepository o-- Ref~Object~
+ScheduleRepository : +channels List~RealtimeChannel~
+ScheduleRepository : -_getEvents() dynamic
+ScheduleRepository : +updateEvents() dynamic
+StateNotifier <|-- ScheduleRepository
 
-class _LoginPageState
-_LoginPageState : +emailController TextEditingController
-_LoginPageState o-- TextEditingController
-_LoginPageState : +passwordController TextEditingController
-_LoginPageState o-- TextEditingController
-_LoginPageState : +storage FlutterSecureStorage
-_LoginPageState o-- FlutterSecureStorage
-_LoginPageState : +isLoggedIn bool
-_LoginPageState : +isLoading bool
-_LoginPageState : +login() dynamic
-_LoginPageState : +getLoginUser() dynamic
-_LoginPageState : +storeToken() void
-_LoginPageState : +getToken() dynamic
-_LoginPageState : +removeToken() void
-_LoginPageState : +navSignUpPage() void
-_LoginPageState : +build() Widget
-State <|-- _LoginPageState
+class UserDetailsRepository
+UserDetailsRepository : +ref Ref~Object?~
+UserDetailsRepository o-- Ref~Object~
+UserDetailsRepository : -_client SupabaseClient
+UserDetailsRepository o-- SupabaseClient
+UserDetailsRepository o-- HashMap~String, UserDetails~
+UserDetailsRepository : +fetchUser() UserDetails?
 
-class MainPage
-MainPage : +selectedIndex int
-MainPage : +createState() State<MainPage>
-StatefulWidget <|-- MainPage
+class CourseScreen
+CourseScreen : +routeName$ String
+CourseScreen : +course Course
+CourseScreen o-- Course
+CourseScreen : +createState() State<CourseScreen>
+StatefulWidget <|-- CourseScreen
 
-class _MainPageState
-_MainPageState : -_pages$ List~Widget~
-_MainPageState : -_onItemTapped() void
-_MainPageState : +build() Widget
-State <|-- _MainPageState
+class _CourseScreenState
+_CourseScreenState : -_currentIndex int
+_CourseScreenState : -_children List~Widget~
+_CourseScreenState : +build() Widget
+_CourseScreenState : +onTabTapped() void
+State <|-- _CourseScreenState
 
-class MyListsPage
-MyListsPage : +createState() _MyListsPageState
-StatefulWidget <|-- MyListsPage
+class Assignments
+Assignments : +build() Widget
+StatelessWidget <|-- Assignments
 
-class _MyListsPageState
-_MyListsPageState : +lists List~StockListModel~
-_MyListsPageState : +isLoading bool
-_MyListsPageState : +initState() void
-_MyListsPageState : +didChangeDependencies() void
-_MyListsPageState : -_fetchDataFromServer() dynamic
-_MyListsPageState : -_navToAddListPage() void
-_MyListsPageState : -_goTiListPageWithDataFromServer() dynamic
-_MyListsPageState : -_navToListPage() void
-_MyListsPageState : +build() Widget
-State <|-- _MyListsPageState
+class Announcements
+Announcements : +fetchAnnouncements() dynamic
+Announcements : +build() Widget
+StatelessWidget <|-- Announcements
 
-class NewUserPage
-NewUserPage : +build() Widget
-StatelessWidget <|-- NewUserPage
+class Group
+Group : +fetchGroups() dynamic
+Group : +build() Widget
+StatelessWidget <|-- Group
 
-class OnboardingPagePresenter
-OnboardingPagePresenter : +pages List~NewUSerPageModel~
-OnboardingPagePresenter : +onSkip void Function?
-OnboardingPagePresenter o-- void Function
-OnboardingPagePresenter : +onFinish void Function?
-OnboardingPagePresenter o-- void Function
-OnboardingPagePresenter : +createState() State<OnboardingPagePresenter>
-StatefulWidget <|-- OnboardingPagePresenter
+class LoginScreen
+LoginScreen : +routeName$ String
+LoginScreen : +createState() ConsumerState<LoginScreen>
+ConsumerStatefulWidget <|-- LoginScreen
 
-class _OnboardingPageState
-_OnboardingPageState : -_currentPage int
-_OnboardingPageState : -_pageController PageController
-_OnboardingPageState o-- PageController
-_OnboardingPageState : -_navigateToLoginPage() void
-_OnboardingPageState : +build() Widget
-State <|-- _OnboardingPageState
+class _LoginState
+_LoginState : -_formKey GlobalKey~FormState~
+_LoginState o-- GlobalKey~FormState~
+_LoginState : +emailController TextEditingController
+_LoginState o-- TextEditingController
+_LoginState : +passwordController TextEditingController
+_LoginState o-- TextEditingController
+_LoginState : +build() Widget
+ConsumerState <|-- _LoginState
 
-class NewUSerPageModel
-NewUSerPageModel : +title String
-NewUSerPageModel : +description String
-NewUSerPageModel : +imageUrl String
-NewUSerPageModel : +bgColor Color
-NewUSerPageModel o-- Color
-NewUSerPageModel : +textColor Color
-NewUSerPageModel o-- Color
+class MainScreen
+MainScreen : +routeName$ String
+MainScreen : +createState() State<MainScreen>
+StatefulWidget <|-- MainScreen
 
-class SignUp
-SignUp : +createState() _SignUpState
-StatefulWidget <|-- SignUp
+class _MainScreenState
+_MainScreenState : -_selectedIndex int
+_MainScreenState : -_widgetOptions$ List~Widget~
+_MainScreenState : -_onItemTapped() void
+_MainScreenState : +build() Widget
+State <|-- _MainScreenState
 
-class _SignUpState
-_SignUpState : +emailController TextEditingController
-_SignUpState o-- TextEditingController
-_SignUpState : +passwordController TextEditingController
-_SignUpState o-- TextEditingController
-_SignUpState : +confirmPasswordController TextEditingController
-_SignUpState o-- TextEditingController
-_SignUpState : +checkPassword() bool
-_SignUpState : +createUser() dynamic
-_SignUpState : +navToLoginSuccessScreen() void
-_SignUpState : +cancel() void
-_SignUpState : +build() Widget
-State <|-- _SignUpState
+class SettingsController
+SettingsController : -_settingsService SettingsService
+SettingsController o-- SettingsService
+SettingsController : -_themeMode ThemeMode
+SettingsController o-- ThemeMode
+SettingsController : +themeMode ThemeMode
+SettingsController o-- ThemeMode
+SettingsController : +loadSettings() dynamic
+SettingsController : +updateThemeMode() dynamic
+ChangeNotifier <|-- SettingsController
 
-class Splash
-Splash : +createState() _SplashState
-StatefulWidget <|-- Splash
+class SettingsService
+SettingsService : +themeMode() dynamic
+SettingsService : +updateThemeMode() dynamic
 
-class _SplashState
-_SplashState : -_controller AnimationController
-_SplashState o-- AnimationController
-_SplashState : -_animation Animation~double~
-_SplashState o-- Animation~double~
-_SplashState : +initState() void
-_SplashState : +dispose() void
-_SplashState : +build() Widget
-State <|-- _SplashState
-SingleTickerProviderStateMixin <|-- _SplashState
+class SettingsView
+SettingsView : +routeName$ String
+SettingsView : +controller SettingsController
+SettingsView o-- SettingsController
+SettingsView : +build() Widget
+StatelessWidget <|-- SettingsView
 
-class StockDetailPage
-StockDetailPage : +stock Stock
-StockDetailPage o-- Stock
-StockDetailPage : +createState() _StockDetailPageState
-StatefulWidget <|-- StockDetailPage
+class CalendarWidget
+CalendarWidget : +createState() ConsumerState<CalendarWidget>
+ConsumerStatefulWidget <|-- CalendarWidget
 
-class _StockDetailPageState
-_StockDetailPageState : +stockLists List~StockListModel~
-_StockDetailPageState : +stock Stock
-_StockDetailPageState o-- Stock
-_StockDetailPageState : +timer Timer
-_StockDetailPageState o-- Timer
-_StockDetailPageState : +stockHistories List~StockHistory~
-_StockDetailPageState : +initState() void
-_StockDetailPageState : +dispose() void
-_StockDetailPageState : -_fetcListDataFromServer() dynamic
-_StockDetailPageState : -_showListOptions() void
-_StockDetailPageState : -_addStockToListInServer() dynamic
-_StockDetailPageState : -_addStockPrchaseToServer() dynamic
-_StockDetailPageState : -_buyStock() void
-_StockDetailPageState : -_getStockDataFromServer() dynamic
-_StockDetailPageState : -_getPrucheasStockStocksFromServer() dynamic
-_StockDetailPageState : -_checkIfUserOwnStock() dynamic
-_StockDetailPageState : -_getPrucheasStockFromServer() dynamic
-_StockDetailPageState : -_setStockHistoriesWithDataFromServer() dynamic
-_StockDetailPageState : -_removeStockPurchase() dynamic
-_StockDetailPageState : -_showAddToListDialog() void
-_StockDetailPageState : -_onRefresh() dynamic
-_StockDetailPageState : +build() Widget
-State <|-- _StockDetailPageState
+class _CalendarWidgetState
+_CalendarWidgetState : -_subjectText String
+_CalendarWidgetState : -_dateText String
+_CalendarWidgetState : -_startTimeText String
+_CalendarWidgetState : -_endTimeText String
+_CalendarWidgetState : -_timeDetails String
+_CalendarWidgetState : +build() Widget
+_CalendarWidgetState : +calendarTapped() void
+ConsumerState <|-- _CalendarWidgetState
 
-class StockWatchlistPage
-StockWatchlistPage : +stockList StockListModel
-StockWatchlistPage o-- StockListModel
-StockWatchlistPage : +createState() _StockWatchlistPageState
-StatefulWidget <|-- StockWatchlistPage
+class HeaderWidget
+HeaderWidget : +title Text
+HeaderWidget o-- Text
+HeaderWidget : +appBar AppBar
+HeaderWidget o-- AppBar
+HeaderWidget : +preferredSize Size
+HeaderWidget o-- Size
+HeaderWidget : +build() Widget
+StatelessWidget <|-- HeaderWidget
+PreferredSizeWidget <|.. HeaderWidget
 
-class _StockWatchlistPageState
-_StockWatchlistPageState : +stocks List~Stock~
-_StockWatchlistPageState : +isLoading bool
-_StockWatchlistPageState : +newNameController TextEditingController
-_StockWatchlistPageState o-- TextEditingController
-_StockWatchlistPageState : +initState() void
-_StockWatchlistPageState : -_fetchStocksDataFromServer() dynamic
-_StockWatchlistPageState : -_setStocksData() void
-_StockWatchlistPageState : -_getStockDataFromnServer() dynamic
-_StockWatchlistPageState : -_removeStockFromList() dynamic
-_StockWatchlistPageState : -_updateListName() dynamic
-_StockWatchlistPageState : -_removeList() dynamic
-_StockWatchlistPageState : -_goToStockDetailPage() void
-_StockWatchlistPageState : -_navToStockDetailPage() void
-_StockWatchlistPageState : -_onRefresh() dynamic
-_StockWatchlistPageState : -_showNewNameOption() void
-_StockWatchlistPageState : -_navMyListPage() void
-_StockWatchlistPageState : +build() Widget
-State <|-- _StockWatchlistPageState
+class HomeWidget
+HomeWidget : +routeName$ String
+HomeWidget : +createState() ConsumerState<HomeWidget>
+ConsumerStatefulWidget <|-- HomeWidget
 
-class StockCard
-StockCard : +stock Stock
-StockCard o-- Stock
-StockCard : +onTap void Function
-StockCard o-- void Function
-StockCard : +build() Widget
-StatelessWidget <|-- StockCard
+class _HomeWidgetState
+_HomeWidgetState : +currentSemester Semester
+_HomeWidgetState o-- Semester
+_HomeWidgetState : +build() Widget
+ConsumerState <|-- _HomeWidgetState
 
-class StockItem
-StockItem : +stock Stock
-StockItem o-- Stock
-StockItem : +build() Widget
-StatelessWidget <|-- StockItem
+class NotificationWidget
+NotificationWidget : +createState() State<NotificationWidget>
+StatefulWidget <|-- NotificationWidget
 
-class StockList
-StockList : +stocks List~Stock~
-StockList : +onStockTap dynamic FunctionStock
-StockList o-- dynamic FunctionStock
-StockList : +onRemoveStock dynamic FunctionStock?
-StockList o-- dynamic FunctionStock
-StockList : +isDeleteEnabled bool
-StockList : +build() Widget
-StatelessWidget <|-- StockList
+class _NotificationWidgetState
+_NotificationWidgetState : +assignments List~Assignment~
+_NotificationWidgetState : -_sortingOption String
+_NotificationWidgetState : +build() Widget
+_NotificationWidgetState : -_showAssignmentDetails() void
+State <|-- _NotificationWidgetState
 
-class StockListItem
-StockListItem : +stockList StockListModel
-StockListItem o-- StockListModel
-StockListItem : +onStockListTap dynamic FunctionStockListModel
-StockListItem o-- dynamic FunctionStockListModel
-StockListItem : +build() Widget
-StatelessWidget <|-- StockListItem
+class ProfileWidget
+ProfileWidget : -_handleOptionSelected() void
+ProfileWidget : +build() Widget
+ConsumerWidget <|-- ProfileWidget
 
-class StockListModelList
-StockListModelList : +stockLists List~StockListModel~
-StockListModelList : +onStockListTap dynamic FunctionStockListModel
-StockListModelList o-- dynamic FunctionStockListModel
-StockListModelList : +build() Widget
-StatelessWidget <|-- StockListModelList
 ```
