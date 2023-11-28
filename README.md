@@ -70,4 +70,11 @@ User : +password String
 User : +uid int
 User : +toJson() Map<String, dynamic>
 
+class TokenManager
+TokenManager : +storage$ FlutterSecureStorage
+TokenManager o-- FlutterSecureStorage
+TokenManager : +storeToken()$ void
+TokenManager : +getToken()$ dynamic
+TokenManager : +removeToken()$ void
+
 ```
