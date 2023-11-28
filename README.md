@@ -22,6 +22,5 @@ samples, guidance on mobile development, and a full API reference.
 class StockListModel
 StockListModel : +lid int
 StockListModel : +name String
-StockListModel : +stocks List~Map~String
 StockListModel : +valid bool
 ```
