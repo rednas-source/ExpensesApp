@@ -34,4 +34,32 @@ Portfolio : +pid int
 Portfolio : +user User
 Portfolio o-- User
 Portfolio : +stockPurchases Set~StockPurchase~
+
+class PortfolioHistory
+PortfolioHistory : +phid int
+PortfolioHistory : +date DateTime
+PortfolioHistory : +price double
+
+class Stock
+Stock : +id int
+Stock : +symbol String
+Stock : +name String
+Stock : +currentPrice double
+Stock : +openingPrice double
+Stock : +percentChangeIntraday double
+Stock : +toJson() Map<String, dynamic>
+
+class StockHistory
+StockHistory : +date DateTime
+StockHistory : +open double
+StockHistory : +close double
+StockHistory : +high double
+StockHistory : +low double
+StockHistory : +volume int
+
+class StockListModel
+StockListModel : +lid int
+StockListModel : +name String
+StockListModel : +stocks List~Map~String, dynamic~~
+StockListModel : +valid bool
 ```
