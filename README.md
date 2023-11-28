@@ -21,6 +21,4 @@ samples, guidance on mobile development, and a full API reference.
 ```mermaid
 class StockListModel
 StockListModel : +lid int
-StockListModel : +name String
-StockListModel : +valid bool
 ```
