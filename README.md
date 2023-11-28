@@ -40,5 +40,13 @@ PortfolioHistory : +phid int
 PortfolioHistory : +date DateTime
 PortfolioHistory : +price double
 
+class Stock
+Stock : +id int
+Stock : +symbol String
+Stock : +name String
+Stock : +currentPrice double
+Stock : +openingPrice double
+Stock : +percentChangeIntraday double
+Stock : +toJson() Map<String, dynamic>
 
 ```
