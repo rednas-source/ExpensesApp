@@ -57,7 +57,10 @@ StockHistory : +high double
 StockHistory : +low double
 StockHistory : +volume int
 
-
-
+class StockPurchase
+StockPurchase : +spid int
+StockPurchase : +date DateTime
+StockPurchase : +price double
+StockPurchase : +quantity int
 
 ```
