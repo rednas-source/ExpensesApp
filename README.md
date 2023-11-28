@@ -49,4 +49,11 @@ Stock : +openingPrice double
 Stock : +percentChangeIntraday double
 Stock : +toJson() Map<String, dynamic>
 
+class StockHistory
+StockHistory : +date DateTime
+StockHistory : +open double
+StockHistory : +close double
+StockHistory : +high double
+StockHistory : +low double
+StockHistory : +volume int
 ```
