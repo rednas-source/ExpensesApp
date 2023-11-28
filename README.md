@@ -63,9 +63,9 @@ StockListModel : +name String
 StockListModel : +stocks List~Map~String, dynamic~~
 StockListModel : +valid bool
 
-class StockPurchase
-StockPurchase : +spid int
-StockPurchase : +date DateTime
-StockPurchase : +price double
-StockPurchase : +quantity int
+class User
+User : +email String
+User : +password String
+User : +uid int
+User : +toJson() Map<String, dynamic>
 ```
