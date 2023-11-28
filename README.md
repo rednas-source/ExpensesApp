@@ -60,6 +60,7 @@ StockHistory : +volume int
 class StockListModel
 StockListModel : +lid int
 StockListModel : +name String
+StockListModel : +stocks List~Map~String, dynamic~~
 StockListModel : +valid bool
 
 class StockPurchase
